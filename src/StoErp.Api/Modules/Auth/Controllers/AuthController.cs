@@ -27,7 +27,8 @@ namespace StoErp.Api.Modules.Auth.Controllers
             {
                 Username = request.Username,
                 Email = request.Email,
-                Password = request.Password
+                Password = request.Password,
+                LanguagePreference = request.LanguagePreference
             };
 
             await _mediator.Send(command, cancellationToken);

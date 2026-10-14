@@ -58,11 +58,6 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
         var userId = UserId.New();
         var passwordHash = _passwordHasher.Hash(command.Password);
         var user = User.Create(userId, username, email, passwordHash, DateTimeOffset.UtcNow);
-        var userRegisteredEvent = new UserRegisteredEvent(
-            userId.Value,
-            username.Value,
-            email.Value,
-            user.CreatedAt);
         var verificationTokenResult = _verificationTokenGenerator.GenerateVerificationToken(_verificationTokenOptions, cancellationToken);
         var verificationTokenHash = _verificationTokenHasher.Hash(verificationTokenResult.Secret);
         var verificationToken = VerificationToken.Create(
@@ -73,6 +68,14 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
             verificationTokenResult.ExpiresAt);
         _userWriteRepository.Add(user);
         _verificationTokenWriteRepository.Add(verificationToken);
+        var userRegisteredEvent = new UserRegisteredEvent(
+            userId.Value,
+            username.Value,
+            email.Value,
+            user.CreatedAt,
+            verificationTokenResult.Secret,
+            command.LanguagePreference
+        );
         _outboxWriter.Add(userRegisteredEvent);
 
         await _unitOfWork.CommitAsync(cancellationToken);

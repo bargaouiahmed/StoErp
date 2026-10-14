@@ -38,12 +38,22 @@ public sealed class UserRegisteredOutboxReaderStrategy : IOutboxEventReaderStrat
         {
             throw new ArgumentException("Payload does not contain a valid 'RegisteredAt' property.", nameof(outboxMessage));
         }
+        if(!outboxMessage.Payload.RootElement.TryGetProperty("UserLanguagePreference", out var userLanguagePreferenceProperty) || userLanguagePreferenceProperty.ValueKind != System.Text.Json.JsonValueKind.String)
+        {
+            throw new ArgumentException("Payload does not contain a valid 'UserLanguagePreference' property.", nameof(outboxMessage));
+        }
+        if(!outboxMessage.Payload.RootElement.TryGetProperty("VerificationTokenSecret", out var verificationTokenProperty) || verificationTokenProperty.ValueKind != System.Text.Json.JsonValueKind.String)
+        {
+            throw new ArgumentException("Payload does not contain a valid 'VerificationToken' property.", nameof(outboxMessage));
+        }
 
         return new UserRegisteredEvent(
             Guid.Parse(userIdProperty.GetString()!),
             usernameProperty.GetString()!,
             emailProperty.GetString()!,
-            DateTimeOffset.Parse(registeredAtProperty.GetString()!)
+            DateTimeOffset.Parse(registeredAtProperty.GetString()!),
+            verificationTokenProperty.GetString()!,
+            userLanguagePreferenceProperty.GetString()!
         );
 
     }

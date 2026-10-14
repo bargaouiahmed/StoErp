@@ -14,6 +14,8 @@
     <Folder Include="Commands\LoginWithEmail\" />
     <Folder Include="Commands\LoginWithUsername\" />
     <Folder Include="Commands\RegisterUser\" />
+    <Folder Include="Commands\RequestPasswordReset\" />
+    <Folder Include="Commands\ResetPassword\" />
     <Folder Include="Commands\VerifyUser\" />
     <Folder Include="Common\" />
     <Folder Include="Common\Errors\" />

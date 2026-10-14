@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using StoErp.Shared.Infrastructure.Messaging;
 using StoErp.Shared.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using StoErp.Modules.Emailing.Infrastructure.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,6 +31,7 @@ builder.Services
 });
 builder.Services.AddAuthInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure();
+builder.Services.AddEmailingInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

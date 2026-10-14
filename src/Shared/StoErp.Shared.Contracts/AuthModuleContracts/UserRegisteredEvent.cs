@@ -3,5 +3,5 @@ using StoErp.Shared.Application.Events;
 
 namespace StoErp.Shared.Contracts.AuthModuleContracts;
 
-public sealed record UserRegisteredEvent(Guid UserId, string Username, string Email, DateTimeOffset RegisteredAt) : IEvent;
+public sealed record UserRegisteredEvent(Guid UserId, string Username, string Email, DateTimeOffset RegisteredAt, string VerificationTokenSecret, string UserLanguagePreference) : IEvent;
 

@@ -57,6 +57,6 @@ public sealed class User
         }
         Verified = true;
     }
-
+    
 
 }

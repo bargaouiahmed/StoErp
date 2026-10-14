@@ -6,4 +6,24 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\StoErp.Shared.Infrastructure\StoErp.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\StoErp.Modules.Emailing.Application\StoErp.Modules.Emailing.Application.csproj" />
+    <ProjectReference Include="..\..\Shared\StoErp.Shared.Contracts\StoErp.Shared.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="DependencyInjection\" />
+    <Folder Include="EventHandlers\" />
+    <Folder Include="Ports\" />
+    <Folder Include="Resolvers\" />
+    <Folder Include="Templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.18.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\**\*.html" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

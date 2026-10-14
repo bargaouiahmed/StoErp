@@ -23,6 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Auth\StoErp.Modules.Auth.Application\StoErp.Modules.Auth.Application.csproj" />
     <ProjectReference Include="..\Auth\StoErp.Modules.Auth.Infrastructure\StoErp.Modules.Auth.Infrastructure.csproj" />
+    <ProjectReference Include="..\Emailing\StoErp.Modules.Emailing.Application\StoErp.Modules.Emailing.Application.csproj" />
+    <ProjectReference Include="..\Emailing\StoErp.Modules.Emailing.Infrastructure\StoErp.Modules.Emailing.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

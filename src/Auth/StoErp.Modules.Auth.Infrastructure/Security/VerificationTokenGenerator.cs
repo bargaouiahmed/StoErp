@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using StoErp.Modules.Auth.Application.Commands.RegisterUser;
 using StoErp.Modules.Auth.Application.Ports.Security;
 
@@ -17,22 +18,15 @@ public class VerificationTokenGenerator : IVerificationTokenGenerator
 
     private string GenerateTokenSecret(int length, bool onlyNumbers)
     {
-        var random = new Random();
-        var tokenSecret = new char[length];
-
-        for (int i = 0; i < length; i++)
+        var chars = onlyNumbers switch 
         {
-            if (onlyNumbers)
-            {
-                tokenSecret[i] = (char)('0' + random.Next(0, 10));
-            }
-            else
-            {
-                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                tokenSecret[i] = chars[random.Next(chars.Length)];
-            }
-        }
+            true => "0123456789",
+            false => "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        };  
+        var tokenSecret = RandomNumberGenerator.GetString(chars, length);
+        return tokenSecret;
+        
 
-        return new string(tokenSecret);
+            
     }
 }
