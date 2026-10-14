@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StoErp.Api/StoErp.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Auth/">
+    <Project Path="src/Auth/StoErp.Modules.Auth.Application/StoErp.Modules.Auth.Application.csproj" />
+    <Project Path="src/Auth/StoErp.Modules.Auth.Domain/StoErp.Modules.Auth.Domain.csproj" />
+    <Project Path="src/Auth/StoErp.Modules.Auth.Infrastructure/StoErp.Modules.Auth.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/StoErp.Shared.Application/StoErp.Shared.Application.csproj" />
+    <Project Path="src/Shared/StoErp.Shared.Contracts/StoErp.Shared.Contracts.csproj" />
+    <Project Path="src/Shared/StoErp.Shared.Infrastructure/StoErp.Shared.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Emailing/">
+    <Project Path="src/Emailing/StoErp.Modules.Emailing.Infrastructure/StoErp.Modules.Emailing.Infrastructure.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup> 
+    <ProjectReference Include="..\StoErp.Modules.Auth.Domain\StoErp.Modules.Auth.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\StoErp.Shared.Application\StoErp.Shared.Application.csproj" />
+    <ProjectReference Include="..\..\Shared\StoErp.Shared.Contracts\StoErp.Shared.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\LoginWithEmail\" />
+    <Folder Include="Commands\LoginWithUsername\" />
+    <Folder Include="Commands\RegisterUser\" />
+    <Folder Include="Commands\VerifyUser\" />
+    <Folder Include="Common\" />
+    <Folder Include="Common\Errors\" />
+    <Folder Include="Ports\Outbox\" />
+    <Folder Include="Ports\Persistence\Projections\" />
+    
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
+  </ItemGroup>
+</Project>

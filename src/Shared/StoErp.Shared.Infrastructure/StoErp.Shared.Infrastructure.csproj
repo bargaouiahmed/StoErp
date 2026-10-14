@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+  <FrameworkReference Include="Microsoft.AspNetCore.App" />
+</ItemGroup>
+<ItemGroup> 
+    <ProjectReference Include="..\StoErp.Shared.Application\StoErp.Shared.Application.csproj" />
+    <ProjectReference Include="..\StoErp.Shared.Contracts\StoErp.Shared.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
+    <Folder Include="EventBus\" />
+    <Folder Include="Messaging\" />
+    <Folder Include="Messaging\Events\" />
+    <Folder Include="Messaging\Outbox\" />
+  </ItemGroup>
+
+</Project>
