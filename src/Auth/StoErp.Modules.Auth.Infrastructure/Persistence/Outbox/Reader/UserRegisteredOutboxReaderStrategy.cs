@@ -46,14 +46,28 @@ public sealed class UserRegisteredOutboxReaderStrategy : IOutboxEventReaderStrat
         {
             throw new ArgumentException("Payload does not contain a valid 'VerificationToken' property.", nameof(outboxMessage));
         }
-
+        if(!outboxMessage.Payload.RootElement.TryGetProperty("Firstname", out var firstnameProperty) || firstnameProperty.ValueKind != System.Text.Json.JsonValueKind.String)
+        {
+            throw new ArgumentException("Payload does not contain a valid 'Firstname' property.", nameof(outboxMessage));
+        }
+        if(!outboxMessage.Payload.RootElement.TryGetProperty("Lastname", out var lastnameProperty) || lastnameProperty.ValueKind != System.Text.Json.JsonValueKind.String)
+        {
+            throw new ArgumentException("Payload does not contain a valid 'Lastname' property.", nameof(outboxMessage));
+        }
+        if(!outboxMessage.Payload.RootElement.TryGetProperty("DateOfBirth", out var dateOfBirthProperty) || dateOfBirthProperty.ValueKind != System.Text.Json.JsonValueKind.String)
+        {
+            throw new ArgumentException("Payload does not contain a valid 'DateOfBirth' property.", nameof(outboxMessage));
+        }
         return new UserRegisteredEvent(
             Guid.Parse(userIdProperty.GetString()!),
             usernameProperty.GetString()!,
             emailProperty.GetString()!,
             DateTimeOffset.Parse(registeredAtProperty.GetString()!),
             verificationTokenProperty.GetString()!,
-            userLanguagePreferenceProperty.GetString()!
+            userLanguagePreferenceProperty.GetString()!,
+            firstnameProperty.GetString()!,
+            lastnameProperty.GetString()!,
+            DateTimeOffset.Parse(dateOfBirthProperty.GetString()!)
         );
 
     }

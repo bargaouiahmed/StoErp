@@ -1,4 +1,4 @@
-using System;
+
 using StoErp.Modules.Emailing.Application.Enums;
 
 namespace StoErp.Modules.Emailing.Application.Ports;

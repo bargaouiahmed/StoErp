@@ -1,4 +1,4 @@
-using System;
+
 using System.Security.Cryptography;
 using StoErp.Modules.Auth.Application.Commands.RegisterUser;
 using StoErp.Modules.Auth.Application.Ports.Security;

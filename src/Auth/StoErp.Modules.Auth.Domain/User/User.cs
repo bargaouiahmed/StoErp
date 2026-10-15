@@ -12,8 +12,10 @@ public sealed class User
     public DateTimeOffset? DeletedAt { get; private set; }
     public List<RefreshToken.RefreshToken> _refreshTokens = [];
     public List<VerificationToken.VerificationToken> _verificationTokens = [];
+    public List<PasswordResetToken.PasswordResetToken> _passwordResetTokens = [];
     public IReadOnlyCollection<RefreshToken.RefreshToken> RefreshTokens => _refreshTokens.ToList().AsReadOnly();
     public IReadOnlyCollection<VerificationToken.VerificationToken> VerificationTokens => _verificationTokens.ToList().AsReadOnly();
+    public IReadOnlyCollection<PasswordResetToken.PasswordResetToken> PasswordResetTokens => _passwordResetTokens.ToList().AsReadOnly();
     public bool Verified { get; private set; } = false;
 
     private User() { }

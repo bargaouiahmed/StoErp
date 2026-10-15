@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using StoErp.Modules.Auth.Domain.PasswordResetToken;
 using StoErp.Modules.Auth.Domain.RefreshToken;
 using StoErp.Modules.Auth.Domain.User;
 using StoErp.Modules.Auth.Domain.VerificationToken;
@@ -18,6 +19,7 @@ public sealed class AuthDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
     public DbSet<VerificationToken> VerificationTokens => Set<VerificationToken>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

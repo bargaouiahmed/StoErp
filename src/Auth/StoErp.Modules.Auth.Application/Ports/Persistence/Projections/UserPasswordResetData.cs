@@ -5,6 +5,7 @@ namespace StoErp.Modules.Auth.Application.Ports.Persistence.Projections;
 public sealed record UserPasswordResetData(
     UserId Id,
     bool IsDeleted,
-    bool Verified
+    bool Verified,
+    string Username
 );  
 

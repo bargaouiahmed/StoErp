@@ -2,30 +2,30 @@
 
 #nullable disable
 
-namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
+namespace StoErp.Modules.Auth.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class VerifiedFlagOnUser : Migration
+    public partial class AddOutboxCompletedHandlers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "verified",
+            migrationBuilder.AddColumn<string[]>(
+                name: "completed_handlers",
                 schema: "auth",
-                table: "users",
-                type: "boolean",
+                table: "outbox_messages",
+                type: "text[]",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: new string[0]);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "verified",
+                name: "completed_handlers",
                 schema: "auth",
-                table: "users");
+                table: "outbox_messages");
         }
     }
 }

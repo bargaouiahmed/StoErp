@@ -1,4 +1,4 @@
-using System;
+
 using Microsoft.AspNetCore.Identity;
 using StoErp.Modules.Auth.Application.Ports.Security;
 using StoErp.Modules.Auth.Domain.VerificationToken;
@@ -13,10 +13,10 @@ public class VerificationTokenHasher : IVerificationTokenHasher
     {
         _passwordHasher = new PasswordHasher<object>();
     }
-    public string Hash(string tokenSecret)
+    public VerificationTokenHash Hash(string tokenSecret)
     {
         var hashedToken = _passwordHasher.HashPassword(dummy, tokenSecret);
-        return hashedToken;
+        return VerificationTokenHash.From(hashedToken);
     }
 
     public bool Verify(string tokenSecret, VerificationTokenHash hash)

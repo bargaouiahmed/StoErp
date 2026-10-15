@@ -1,4 +1,4 @@
-using System;
+
 using StoErp.Modules.Auth.Domain.PasswordResetToken;
 using StoErp.Modules.Auth.Domain.User;
 

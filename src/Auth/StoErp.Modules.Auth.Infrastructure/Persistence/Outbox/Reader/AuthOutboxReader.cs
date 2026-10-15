@@ -47,16 +47,40 @@ public sealed class AuthOutboxReader : IOutboxReader
 
             if (strategy is null)
             {
-                throw new InvalidOperationException(
-                    $"No outbox reader strategy is registered for event type '{entry.EventType}'.");
+                await DeadLetterAsync(
+                    entry,
+                    $"No outbox reader strategy is registered for event type '{entry.EventType}'.",
+                    cancellationToken);
+                continue;
             }
 
-            events.Add(new OutboxEvent(
-                entry,
-                strategy.DeserializeEvent(entry)));
+            try
+            {
+                events.Add(new OutboxEvent(
+                    entry,
+                    strategy.DeserializeEvent(entry)));
+            }
+            catch (Exception exception)
+            {
+                await DeadLetterAsync(entry, exception.ToString(), cancellationToken);
+            }
         }
 
         return events;
+    }
+
+    private async Task DeadLetterAsync(
+        OutboxEntry entry,
+        string reason,
+        CancellationToken cancellationToken)
+    {
+        entry.Payload?.Dispose();
+
+        await _outboxRepository.MarkAsDeadAsync(
+            entry.Id,
+            reason,
+            DateTimeOffset.UtcNow,
+            cancellationToken);
     }
 
     public async Task MarkAsProcessedAsync(
@@ -91,6 +115,17 @@ public sealed class AuthOutboxReader : IOutboxReader
             messageId,
             errorMessage,
             DateTimeOffset.UtcNow,
+            cancellationToken);
+    }
+
+    public async Task MarkHandlersCompletedAsync(
+        Guid messageId,
+        IReadOnlyCollection<string> handlerNames,
+        CancellationToken cancellationToken = default)
+    {
+        await _outboxRepository.MarkHandlersCompletedAsync(
+            messageId,
+            handlerNames,
             cancellationToken);
     }
     public Task CommitAsync(CancellationToken cancellationToken = default)

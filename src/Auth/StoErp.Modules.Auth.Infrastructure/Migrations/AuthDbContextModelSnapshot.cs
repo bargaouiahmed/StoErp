@@ -9,7 +9,7 @@ using StoErp.Modules.Auth.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
+namespace StoErp.Modules.Auth.Infrastructure.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
     partial class AuthDbContextModelSnapshot : ModelSnapshot
@@ -23,6 +23,44 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("StoErp.Modules.Auth.Domain.PasswordResetToken.PasswordResetToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_used");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("token_hash");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_password_reset_tokens");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_password_reset_tokens_user_id");
+
+                    b.ToTable("password_reset_tokens", "auth");
+                });
 
             modelBuilder.Entity("StoErp.Modules.Auth.Domain.RefreshToken.RefreshToken", b =>
                 {
@@ -167,6 +205,11 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("attempt_count");
 
+                    b.PrimitiveCollection<string[]>("CompletedHandlers")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("completed_handlers");
+
                     b.Property<DateTimeOffset?>("DeadAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("dead_at");
@@ -207,6 +250,18 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                     b.ToTable("outbox_messages", "auth");
                 });
 
+            modelBuilder.Entity("StoErp.Modules.Auth.Domain.PasswordResetToken.PasswordResetToken", b =>
+                {
+                    b.HasOne("StoErp.Modules.Auth.Domain.User.User", "User")
+                        .WithMany("PasswordResetTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_password_reset_tokens_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("StoErp.Modules.Auth.Domain.RefreshToken.RefreshToken", b =>
                 {
                     b.HasOne("StoErp.Modules.Auth.Domain.User.User", "User")
@@ -233,6 +288,8 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("StoErp.Modules.Auth.Domain.User.User", b =>
                 {
+                    b.Navigation("PasswordResetTokens");
+
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("VerificationTokens");

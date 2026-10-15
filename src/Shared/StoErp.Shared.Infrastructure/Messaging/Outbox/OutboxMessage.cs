@@ -13,6 +13,7 @@ public sealed class OutboxMessage
     public int AttemptCount { get; private set; }
     public DateTimeOffset? NextAttemptAt { get; private set; }
     public DateTimeOffset? DeadAt { get; private set; }
+    public string[] CompletedHandlers { get; private set; } = [];
     public JsonDocument? ErrorHistory { get; private set; }
     private OutboxMessage() { }
 
@@ -34,6 +35,13 @@ public sealed class OutboxMessage
         ProcessedAt = processedAt;
         NextAttemptAt = null;
 
+    }
+    public void RecordCompletedHandlers(IEnumerable<string> handlerNames)
+    {
+        CompletedHandlers =
+        [
+            .. CompletedHandlers.Union(handlerNames, StringComparer.Ordinal)
+        ];
     }
     public void RecordFailure(string errorMessage, DateTimeOffset nextAttemptAt)
     {
@@ -61,16 +69,15 @@ public sealed class OutboxMessage
             Timestamp = DateTimeOffset.UtcNow
         };
 
-        if (ErrorHistory == null)
-        {
-            ErrorHistory = JsonDocument.Parse($"[{JsonSerializer.Serialize(errorEntry)}]");
-        }
-        else
-        {
-            var existingErrors = ErrorHistory.RootElement.EnumerateArray().ToList();
-            existingErrors.Add(JsonSerializer.Deserialize<JsonElement>(JsonSerializer.Serialize(errorEntry)));
-            ErrorHistory = JsonDocument.Parse(JsonSerializer.Serialize(existingErrors));
-        }
+        var previousHistory = ErrorHistory;
+        var existingErrors = previousHistory is null
+            ? new List<JsonElement>()
+            : previousHistory.RootElement.EnumerateArray().ToList();
+
+        existingErrors.Add(JsonSerializer.SerializeToElement(errorEntry));
+
+        ErrorHistory = JsonDocument.Parse(JsonSerializer.Serialize(existingErrors));
+        previousHistory?.Dispose();
     }
 
 

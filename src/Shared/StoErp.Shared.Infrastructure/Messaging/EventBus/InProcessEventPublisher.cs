@@ -13,6 +13,8 @@ public sealed class InProcessEventPublisher : IEventPublisher
 
     public async Task PublishAsync<TEvent>(
         TEvent eventMessage,
+        IReadOnlyCollection<string> completedHandlers,
+        ISet<string> newlyCompletedHandlers,
         CancellationToken cancellationToken = default)
         where TEvent : IEvent
     {
@@ -25,9 +27,23 @@ public sealed class InProcessEventPublisher : IEventPublisher
             throw new InvalidOperationException(
                 $"No event handlers are registered for event type '{typeof(TEvent).Name}'.");
         }
+
+        var completed = new HashSet<string>(completedHandlers, StringComparer.Ordinal);
+
         foreach (var handler in handlers)
         {
+            var handlerName = handler.GetType().FullName
+                ?? throw new InvalidOperationException(
+                    $"Could not resolve the name of handler '{handler.GetType().Name}'.");
+
+            if (completed.Contains(handlerName))
+            {
+                continue;
+            }
+
             await handler.HandleAsync(eventMessage, cancellationToken);
+
+            newlyCompletedHandlers.Add(handlerName);
         }
     }
 }

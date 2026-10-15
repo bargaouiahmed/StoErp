@@ -9,4 +9,7 @@ public sealed record OutboxEntry
     JsonDocument Payload,
     DateTimeOffset OccurredAt,
     int AttemptCount
-);
+)
+{
+    public IReadOnlyCollection<string> CompletedHandlers { get; init; } = [];
+}

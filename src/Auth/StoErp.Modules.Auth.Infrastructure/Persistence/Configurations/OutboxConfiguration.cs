@@ -34,6 +34,10 @@ public sealed class OutboxConfiguration : IEntityTypeConfiguration<OutboxMessage
 
             builder.Property(message => message.DeadAt);
 
+            builder.Property(message => message.CompletedHandlers)
+                .HasColumnType("text[]")
+                .IsRequired();
+
             builder.Property(message => message.ErrorHistory)
                 .HasColumnType("jsonb");
 

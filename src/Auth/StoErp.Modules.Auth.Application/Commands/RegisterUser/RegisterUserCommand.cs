@@ -8,5 +8,8 @@ public sealed record RegisterUserCommand : ICommand<RegisterUserResult>
     public required string Password { get; init; }
     public required string Email { get; init; }
     public string LanguagePreference { get; init; } = "en";
+    public required string Firstname { get; init; } 
+    public required string Lastname { get; init; } 
+    public required DateTimeOffset DateOfBirth { get; init; } 
 
 }

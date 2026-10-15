@@ -1,4 +1,4 @@
-using System;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StoErp.Modules.Emailing.Application.Handlers;
@@ -28,6 +28,7 @@ public static class EmailingInfrastructureServiceCollectionExtensions
         _services.AddScoped<IEmailPort, EmailPort>();
         _services.AddScoped<IEmailTemplateResolver, EmailTemplateResolver>();
         _services.AddScoped<IEventHandler<UserRegisteredEvent>, UserRegisteredEventHandler>();
+        _services.AddScoped<IEventHandler<UserRequestedChangePassword>, UserRequestedChangePasswordHandler>();
         return _services;
     }
 }

@@ -8,7 +8,8 @@ public sealed class PasswordResetToken
 {   
     public PasswordResetTokenId Id {get;private set;}
     public PasswordResetTokenHash TokenHash {get;private set;}
-    public User.UserId UserId {get;private set;}
+    public UserId UserId {get;private set;}
+    public User.User? User {get;private set;}
     public DateTimeOffset CreatedAt {get;private set;}
     public DateTimeOffset ExpiresAt {get;private set;}
     public bool IsUsed {get;private set;} = false;

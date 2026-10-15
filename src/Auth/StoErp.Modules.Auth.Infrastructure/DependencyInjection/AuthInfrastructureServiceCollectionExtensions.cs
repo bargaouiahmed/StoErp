@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StoErp.Modules.Auth.Application.Commands.Login;
 using StoErp.Modules.Auth.Application.Commands.RegisterUser;
+using StoErp.Modules.Auth.Application.Commands.RequestPasswordReset;
 using StoErp.Modules.Auth.Application.Ports.Outbox;
 using StoErp.Modules.Auth.Application.Ports.Persistence;
 using StoErp.Modules.Auth.Application.Ports.Security;
@@ -27,8 +28,15 @@ public static class AuthInfrastructureServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("ConnectionString");
         services.AddDbContext<AuthDbContext>(options =>
         {
-            options.UseNpgsql(connectionString)
+            options.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__ef_migrations_history_auth"))
             .UseSnakeCaseNamingConvention();
+        });
+        services.AddSingleton(new PasswordResetTokenOptions
+        {
+            TokenExpirationTime = TimeSpan.FromMinutes(double.Parse(configuration["PasswordResetTokenOptions:PasswordResetTokenLifeTimeInMinutes"] ?? throw new InvalidOperationException("PasswordResetTokenLifeTimeInMinutes not found in configuration."))),
+            TokenLength = int.Parse(configuration["PasswordResetTokenOptions:PasswordResetTokenLength"] ?? throw new InvalidOperationException("PasswordResetTokenLength not found in configuration.")),
+            OnlyNumbers = bool.Parse(configuration["PasswordResetTokenOptions:PasswordResetTokenOnlyNumbers"] ?? throw new InvalidOperationException("PasswordResetTokenOnlyNumbers not found in configuration."))
         });
         services.AddSingleton(new JwtOptions
         {
@@ -65,7 +73,9 @@ public static class AuthInfrastructureServiceCollectionExtensions
         services.AddScoped<IVerificationTokenHasher, VerificationTokenHasher>();
         services.AddScoped<IVerificationTokenWriteRepository, VerificationTokenWriteRepository>();
         services.AddScoped<IVerificationTokenReadRepository, VerificationTokenReadRepository>();
-        
+        services.AddScoped<IPasswordResetTokenGenerator, PasswordResetTokenGenerator>();
+        services.AddScoped<IPasswordResetTokenHasher, PasswordResetTokenHasher>();
+        services.AddScoped<IPasswordResetTokenWriteRepository, PasswordResetTokenWriteRepository>();
         services.AddOutboxWriterStrategies(typeof(AuthOutboxWriter).Assembly);
         services.AddOutboxReaderStrategies(typeof(AuthOutboxReader).Assembly);
         return services;

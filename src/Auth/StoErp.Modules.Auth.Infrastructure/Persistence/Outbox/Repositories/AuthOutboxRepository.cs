@@ -48,8 +48,25 @@ public sealed class AuthOutboxRepository : IAuthOutboxRepository
                 message.EventType,
                 message.Payload,
                 message.OccurredAt,
-                message.AttemptCount))
+                message.AttemptCount)
+            {
+                CompletedHandlers = message.CompletedHandlers
+            })
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task MarkHandlersCompletedAsync(
+        Guid messageId,
+        IReadOnlyCollection<string> handlerNames,
+        CancellationToken cancellationToken = default)
+    {
+        if (handlerNames.Count == 0)
+        {
+            return;
+        }
+
+        var message = await FindMessageAsync(messageId, cancellationToken);
+        message.RecordCompletedHandlers(handlerNames);
     }
 
     public async Task MarkAsProcessedAsync(

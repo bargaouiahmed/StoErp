@@ -25,6 +25,8 @@
     <ProjectReference Include="..\Auth\StoErp.Modules.Auth.Infrastructure\StoErp.Modules.Auth.Infrastructure.csproj" />
     <ProjectReference Include="..\Emailing\StoErp.Modules.Emailing.Application\StoErp.Modules.Emailing.Application.csproj" />
     <ProjectReference Include="..\Emailing\StoErp.Modules.Emailing.Infrastructure\StoErp.Modules.Emailing.Infrastructure.csproj" />
+    <ProjectReference Include="..\ProfileModule\StoErp.Modules.ProfileModule.Application\StoErp.Modules.ProfileModule.Application.csproj" />
+    <ProjectReference Include="..\ProfileModule\StoErp.Modules.ProfileModule.Infrastructure\StoErp.Modules.ProfileModule.Infrastructure.csproj" />  
   </ItemGroup>
 
   <ItemGroup>

@@ -1,26 +1,23 @@
-﻿
+﻿using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
+namespace StoErp.Modules.Auth.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddOutboxDeadStateAndErrorHistory : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "messaging");
-
-            migrationBuilder.EnsureSchema(
                 name: "auth");
 
             migrationBuilder.CreateTable(
                 name: "outbox_messages",
-                schema: "messaging",
+                schema: "auth",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -49,11 +46,36 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                     password_hash = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    verified = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "password_reset_tokens",
+                schema: "auth",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    token_hash = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    expires_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    is_used = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_password_reset_tokens", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_password_reset_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "auth",
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,11 +102,42 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "verification_tokens",
+                schema: "auth",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    token_hash = table.Column<string>(type: "text", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    expires_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    is_used = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_verification_tokens", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_verification_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "auth",
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_outbox_messages_processed_at_next_attempt_at",
-                schema: "messaging",
+                schema: "auth",
                 table: "outbox_messages",
                 columns: new[] { "processed_at", "next_attempt_at" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_password_reset_tokens_user_id",
+                schema: "auth",
+                table: "password_reset_tokens",
+                column: "user_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_refresh_tokens_hash",
@@ -112,6 +165,13 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
                 table: "users",
                 column: "username",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_verification_tokens_user_id",
+                schema: "auth",
+                table: "verification_tokens",
+                column: "user_id",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -119,10 +179,18 @@ namespace StoErp.Modules.Auth.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "outbox_messages",
-                schema: "messaging");
+                schema: "auth");
+
+            migrationBuilder.DropTable(
+                name: "password_reset_tokens",
+                schema: "auth");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
+                name: "verification_tokens",
                 schema: "auth");
 
             migrationBuilder.DropTable(

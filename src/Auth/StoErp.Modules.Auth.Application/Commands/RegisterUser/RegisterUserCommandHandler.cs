@@ -63,7 +63,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
         var verificationToken = VerificationToken.Create(
             VerificationTokenId.New(),
             userId,
-            VerificationTokenHash.From(verificationTokenHash),
+            verificationTokenHash,
             DateTimeOffset.UtcNow,
             verificationTokenResult.ExpiresAt);
         _userWriteRepository.Add(user);
@@ -74,7 +74,10 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
             email.Value,
             user.CreatedAt,
             verificationTokenResult.Secret,
-            command.LanguagePreference
+            command.LanguagePreference,
+            command.Firstname,
+            command.Lastname,
+            command.DateOfBirth
         );
         _outboxWriter.Add(userRegisteredEvent);
 

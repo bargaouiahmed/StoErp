@@ -70,4 +70,26 @@ public sealed class UserReadRepository : IUserReadRepository
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         return user;
     }
+
+    public async Task<UserVerificationData?> GetVerificationDataByIdAsync(UserId userId, CancellationToken cancellationToken = default)
+    {
+        var userEntity =await _dbContext.Users.AsNoTracking()
+            .Where(u => u.Id == userId)
+            .Select(u => new UserVerificationData(u.Id, u.Verified, u.DeletedAt.HasValue))
+            .FirstOrDefaultAsync();
+        return userEntity;
+        
+        
+        
+    }
+
+    public async Task<UserPasswordResetData?> GetPasswordResetDataByEmailAsync(Email userEmail, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Users.AsNoTracking()
+            .Where(u => u.Email == userEmail)
+            .Select(u => new UserPasswordResetData(u.Id, u.DeletedAt.HasValue, u.Verified, u.Username.Value))
+            .FirstOrDefaultAsync(cancellationToken);
+        
+
+    }
 }

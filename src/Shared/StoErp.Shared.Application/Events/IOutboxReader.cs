@@ -22,6 +22,11 @@ public interface IOutboxReader
         string errorMessage,
         CancellationToken cancellationToken = default);
 
+    Task MarkHandlersCompletedAsync(
+        Guid messageId,
+        IReadOnlyCollection<string> handlerNames,
+        CancellationToken cancellationToken = default);
+
     Task CommitAsync(
         CancellationToken cancellationToken = default);
 }

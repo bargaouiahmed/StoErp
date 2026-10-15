@@ -16,4 +16,9 @@
     <Project Path="src/Emailing/StoErp.Modules.Emailing.Application/StoErp.Modules.Emailing.Application.csproj" />
     <Project Path="src/Emailing/StoErp.Modules.Emailing.Infrastructure/StoErp.Modules.Emailing.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/ProfileModule/">
+    <Project Path="src/ProfileModule/StoErp.Modules.ProfileModule.Application/StoErp.Modules.ProfileModule.Application.csproj" />
+    <Project Path="src/ProfileModule/StoErp.Modules.ProfileModule.Domain/StoErp.Modules.ProfileModule.Domain.csproj" />
+    <Project Path="src/ProfileModule/StoErp.Modules.ProfileModule.Infrastructure/StoErp.Modules.ProfileModule.Infrastructure.csproj" />
+  </Folder>
 </Solution>

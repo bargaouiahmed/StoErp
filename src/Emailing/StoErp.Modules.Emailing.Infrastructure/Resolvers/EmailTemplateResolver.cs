@@ -14,6 +14,8 @@ public sealed partial class EmailTemplateResolver : IEmailTemplateResolver
         {
             EmailTemplates.VerificationEmailTemplateEn => "verification-template-en.html",
             EmailTemplates.VerificationEmailTemplateFr => "verification-template-fr.html",
+            EmailTemplates.PasswordResetEmailTemplateEn => "password-reset-template-en.html",
+            EmailTemplates.PasswordResetEmailTemplateFr => "password-reset-template-fr.html",
             _ => throw new ArgumentOutOfRangeException(nameof(emailTemplate), emailTemplate, null)
         };
 

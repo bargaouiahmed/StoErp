@@ -26,4 +26,9 @@ public interface IAuthOutboxRepository
         string errorMessage,
         DateTimeOffset deadAt,
         CancellationToken cancellationToken = default);
+
+    Task MarkHandlersCompletedAsync(
+        Guid messageId,
+        IReadOnlyCollection<string> handlerNames,
+        CancellationToken cancellationToken = default);
 }
