@@ -15,7 +15,7 @@ public class ProfileSettingsProvider : IProfileSettingsProvider
     }
     
 
-    public async Task<LanguagePreferenceSettings> GetLanguageSettingsAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<LanguagePreferenceSettings> GetLanguageSettingsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var userIdValue = UserId.From(userId);
         var languagePreferenceSettings = await _profileReadRepository.GetLanguagePreferenceSettingsByUserIdAsync(userIdValue, cancellationToken);
@@ -23,5 +23,11 @@ public class ProfileSettingsProvider : IProfileSettingsProvider
         return languagePreferenceSettings ?? new LanguagePreferenceSettings("en");
 
         
+    }
+
+    public async Task<Shared.Contracts.ProfileModuleContracts.Profile?> GetProfileByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var userIdValue = UserId.From(userId);
+        return await _profileReadRepository.GetByUserIdAsync(userIdValue, cancellationToken);
     }
 }

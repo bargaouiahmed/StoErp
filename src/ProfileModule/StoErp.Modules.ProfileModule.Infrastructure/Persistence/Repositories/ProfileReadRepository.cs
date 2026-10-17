@@ -14,11 +14,15 @@ public class ProfileReadRepository : IProfileReadRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Profile?> GetByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
+    public async Task<Shared.Contracts.ProfileModuleContracts.Profile?> GetByUserIdAsync(UserId userId, CancellationToken cancellationToken = default) => await _dbContext.Profiles.AsNoTracking().Where(p => p.UserId == userId).Select(p => new Shared.Contracts.ProfileModuleContracts.Profile
     {
-        return await _dbContext.Profiles.AsNoTracking().FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
-        
-    }
+        ProfileId = p.Id.Value,
+        UserId = p.UserId.Value,
+        FirstName = p.Firstname.Value,
+        LastName = p.Lastname.Value,
+        DateOfBirth = p.DateOfBirth,
+        LanguagePreference = p.LanguagePreference.Value
+    }).FirstOrDefaultAsync();
 
     public Task<LanguagePreferenceSettings?> GetLanguagePreferenceSettingsByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
     {

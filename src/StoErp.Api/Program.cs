@@ -24,11 +24,13 @@ builder.Services
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JwtOptions:Issuer"] ?? throw new InvalidOperationException("JWT Issuer not found in configuration."),
         ValidAudience = builder.Configuration["JwtOptions:Audience"] ?? throw new InvalidOperationException("JWT Audience not found in configuration."),
         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["JwtOptions:Secret"] ?? throw new InvalidOperationException("JWT Secret not found in configuration.")))
     };
+    options.MapInboundClaims = false;
 });
 builder.Services.AddAuthInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure();

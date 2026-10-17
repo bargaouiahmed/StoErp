@@ -11,4 +11,5 @@ public interface IUserReadRepository
     Task<User?> GetByEmailForUpdateAsync(Email email, CancellationToken cancellationToken = default);
     Task<UserVerificationData?> GetVerificationDataByIdAsync(UserId userId, CancellationToken cancellationToken = default);
     Task<UserPasswordResetData?> GetPasswordResetDataByEmailAsync(Email userEmail, CancellationToken cancellationToken = default);
+    Task<User?> GetByIdAsync(UserId userId, CancellationToken cancellationToken = default);
 }

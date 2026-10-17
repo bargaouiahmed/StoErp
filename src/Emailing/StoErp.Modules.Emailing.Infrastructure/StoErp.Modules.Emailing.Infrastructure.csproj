@@ -20,7 +20,8 @@
     <Folder Include="Templates\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.18.1" />
+    <PackageReference Include="MailKit" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\**\*.html" CopyToOutputDirectory="PreserveNewest" />

@@ -5,5 +5,6 @@ namespace StoErp.Shared.Contracts.ProfileModuleContracts;
 public interface IProfileSettingsProvider
 {
 
-    Task<LanguagePreferenceSettings> GetLanguageSettingsAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<LanguagePreferenceSettings> GetLanguageSettingsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<Profile?> GetProfileByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 }

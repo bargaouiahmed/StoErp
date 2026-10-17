@@ -92,4 +92,10 @@ public sealed class UserReadRepository : IUserReadRepository
         
 
     }
+
+    public  async Task<User?> GetByIdAsync(UserId userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        
+    }
 }

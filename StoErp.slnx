@@ -21,4 +21,7 @@
     <Project Path="src/ProfileModule/StoErp.Modules.ProfileModule.Domain/StoErp.Modules.ProfileModule.Domain.csproj" />
     <Project Path="src/ProfileModule/StoErp.Modules.ProfileModule.Infrastructure/StoErp.Modules.ProfileModule.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/StoErp.Modules.Auth.Domain.UnitTests/StoErp.Modules.Auth.Domain.UnitTests.csproj" />
+  </Folder>
 </Solution>
