@@ -68,6 +68,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
             verificationTokenResult.ExpiresAt);
         _userWriteRepository.Add(user);
         _verificationTokenWriteRepository.Add(verificationToken);
+        verificationToken.SetTtlExpiresAt(verificationTokenResult.ExpiresAt);
         var userRegisteredEvent = new UserRegisteredEvent(
             userId.Value,
             username.Value,

@@ -9,6 +9,7 @@ using StoErp.Modules.Auth.Application.Commands.LoginWithEmail;
 using StoErp.Modules.Auth.Application.Commands.LoginWithUsername;
 using StoErp.Modules.Auth.Application.Commands.RegisterUser;
 using StoErp.Modules.Auth.Application.Commands.RequestPasswordReset;
+using StoErp.Modules.Auth.Application.Commands.ResetPassword;
 using StoErp.Modules.Auth.Application.Commands.VerifyUser;
 using StoErp.Modules.Auth.Application.Queries.LoggedInUserDetails;
 
@@ -79,7 +80,13 @@ namespace StoErp.Api.Modules.Auth.Controllers
             await _mediator.Send(command, cancellationToken);
             return Ok();
         }
-
+        [HttpPut("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
+        {
+            var command = new ResetPasswordCommand(request.Email, request.NewPassword, request.ResetTokenSecret);
+            await _mediator.Send(command, cancellationToken);
+            return Ok();
+        }
         [Authorize]
         [HttpGet("me")]
 

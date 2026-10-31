@@ -11,6 +11,7 @@ public sealed class VerificationToken
     public DateTimeOffset ExpiresAt { get; private set; }
     public bool IsUsed { get; private set; } = false;
     public User.User? User { get; private set; }
+    public DateTimeOffset? TtlExpiresAt {get; private set;}
     private VerificationToken() { }
     private VerificationToken(VerificationTokenId id, User.UserId userId, VerificationTokenHash tokenHash, DateTimeOffset createdAt, DateTimeOffset expiresAt)
     {
@@ -34,6 +35,10 @@ public sealed class VerificationToken
             throw new InvalidOperationException("Verification token is already used.");
         }
         IsUsed = true;
+    }
+    public void SetTtlExpiresAt(DateTimeOffset ttlExpiresAt)
+    {
+        TtlExpiresAt = ttlExpiresAt;
     }
 
 }

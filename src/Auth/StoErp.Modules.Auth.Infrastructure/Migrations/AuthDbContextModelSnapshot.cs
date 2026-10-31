@@ -19,7 +19,7 @@ namespace StoErp.Modules.Auth.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -48,6 +48,10 @@ namespace StoErp.Modules.Auth.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("token_hash");
 
+                    b.Property<DateTimeOffset?>("TtlExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ttl_expires_at");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
@@ -55,8 +59,10 @@ namespace StoErp.Modules.Auth.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_password_reset_tokens");
 
+                    b.HasIndex("TtlExpiresAt")
+                        .HasDatabaseName("ix_password_reset_tokens_ttl_expires_at");
+
                     b.HasIndex("UserId")
-                        .IsUnique()
                         .HasDatabaseName("ix_password_reset_tokens_user_id");
 
                     b.ToTable("password_reset_tokens", "auth");
@@ -180,12 +186,19 @@ namespace StoErp.Modules.Auth.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("token_hash");
 
+                    b.Property<DateTimeOffset?>("TtlExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ttl_expires_at");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_verification_tokens");
+
+                    b.HasIndex("TtlExpiresAt")
+                        .HasDatabaseName("ix_verification_tokens_ttl_expires_at");
 
                     b.HasIndex("UserId")
                         .IsUnique()

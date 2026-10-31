@@ -56,7 +56,8 @@ public RequestPasswordResetCommandHandler(
         var passwordResetTokenHash = _passwordResetTokenHasher.Hash(passwordResetTokenSecret);
         var passwordResetTokenExpiresAt = DateTimeOffset.UtcNow.Add(_passwordResetTokenOptions.TokenExpirationTime);
 
-        var passwordResetToken = PasswordResetToken.Create(PasswordResetTokenId.New(),user.Id, passwordResetTokenHash, passwordResetTokenExpiresAt, DateTimeOffset.UtcNow);
+        var passwordResetToken = PasswordResetToken.Create(PasswordResetTokenId.New(),user.Id, passwordResetTokenHash,DateTimeOffset.UtcNow,  passwordResetTokenExpiresAt);
+        passwordResetToken.SetTtlExpiresAt(passwordResetTokenExpiresAt);
         _passwordResetTokenWriteRepository.Add(passwordResetToken);
         var languageSettings = await _profileSettingsProvider.GetLanguageSettingsByUserIdAsync(user.Id.Value, cancellationToken);
         var passwordResetRequestedEvent = new UserRequestedChangePassword(command.Email, passwordResetTokenSecret, user.Username,languageSettings.LanguagePreference);

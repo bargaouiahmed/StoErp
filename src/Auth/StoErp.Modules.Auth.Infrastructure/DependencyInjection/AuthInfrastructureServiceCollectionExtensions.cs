@@ -76,6 +76,7 @@ public static class AuthInfrastructureServiceCollectionExtensions
         services.AddScoped<IPasswordResetTokenGenerator, PasswordResetTokenGenerator>();
         services.AddScoped<IPasswordResetTokenHasher, PasswordResetTokenHasher>();
         services.AddScoped<IPasswordResetTokenWriteRepository, PasswordResetTokenWriteRepository>();
+        services.AddScoped<IPasswordResetTokenReadRepository, PasswordResetTokenReadRepository>();
         services.AddOutboxWriterStrategies(typeof(AuthOutboxWriter).Assembly);
         services.AddOutboxReaderStrategies(typeof(AuthOutboxReader).Assembly);
         return services;

@@ -8,6 +8,5 @@ public interface IUserWriteRepository
 
     Task<bool> ExistsByUsernameAsync(Username username, CancellationToken cancellationToken = default);
     Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default);
-
     void Add(User user);
 }

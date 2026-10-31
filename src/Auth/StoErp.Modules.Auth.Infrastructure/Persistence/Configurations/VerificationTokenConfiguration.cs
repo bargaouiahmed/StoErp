@@ -29,5 +29,9 @@ public sealed class VerificationTokenConfiguration : IEntityTypeConfiguration<Ve
             .WithMany(u => u.VerificationTokens)
             .HasForeignKey(token => token.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(t=>t.TtlExpiresAt)
+            .HasColumnName("ttl_expires_at")
+            .IsRequired(false);
+        builder.HasIndex(t=>t.TtlExpiresAt);
     }
 }

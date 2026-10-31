@@ -43,6 +43,15 @@ public sealed class User
         PasswordHash = passwordHash;
         UpdatedAt = now;
     }
+    public void UpdatePassword(PasswordHash passwordHash, DateTimeOffset now)
+    {
+        if (IsDeleted())
+        {
+            throw new InvalidOperationException("Cannot update a deleted user.");
+        }
+        PasswordHash = passwordHash;
+        UpdatedAt = now;
+    }
     public void Delete(DateTimeOffset now)
     {
         DeletedAt = now;

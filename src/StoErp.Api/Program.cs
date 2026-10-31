@@ -5,6 +5,7 @@ using StoErp.Shared.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using StoErp.Modules.Emailing.Infrastructure.DependencyInjection;
 using StoErp.Modules.ProfileModule.Infrastructure.DependencyInjection;
+using PgTtl.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,6 +37,11 @@ builder.Services.AddAuthInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure();
 builder.Services.AddEmailingInfrastructure(builder.Configuration);
 builder.Services.AddProfileInfrastructure(builder.Configuration);
+builder.Services.AddPgTtl(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("ConnectionString not found in configuration.");
+    options.ScanInterval = TimeSpan.FromSeconds(10);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

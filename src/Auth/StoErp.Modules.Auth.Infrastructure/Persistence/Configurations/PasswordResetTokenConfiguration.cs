@@ -29,12 +29,15 @@ public class PasswordResetTokenConfiguration : IEntityTypeConfiguration<Password
             .IsRequired();
         builder.Property(t => t.ExpiresAt)
             .IsRequired();
-        builder.HasIndex(t => t.UserId)
-            .IsUnique();
+        builder.HasIndex(t => t.UserId);
         builder.Property(t=>t.TokenHash)
         .HasMaxLength(255)
         .IsRequired();
-        
+        // make sure ttl expires at is written as ttl_expires_at in the database
+        builder.Property(t => t.TtlExpiresAt)
+            .HasColumnName("ttl_expires_at")
+            .IsRequired(false);
+        builder.HasIndex(t=>t.TtlExpiresAt);
         
     }
 }

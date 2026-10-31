@@ -13,7 +13,7 @@ public sealed class PasswordResetToken
     public DateTimeOffset CreatedAt {get;private set;}
     public DateTimeOffset ExpiresAt {get;private set;}
     public bool IsUsed {get;private set;} = false;
-     
+    public DateTimeOffset? TtlExpiresAt {get; private set;}
     private PasswordResetToken() { }
     private PasswordResetToken(PasswordResetTokenId id, UserId userId,PasswordResetTokenHash tokenHash, DateTimeOffset createdAt, DateTimeOffset expiresAt)
     {
@@ -34,6 +34,10 @@ public sealed class PasswordResetToken
             throw new InvalidOperationException("Password reset token is already used.");
         }
         IsUsed = true;
+    }
+    public void SetTtlExpiresAt(DateTimeOffset ttlExpiresAt)
+    {
+        TtlExpiresAt = ttlExpiresAt;
     }
 
 }
